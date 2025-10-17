@@ -2,6 +2,12 @@
 
 A comprehensive web-based system for managing church members (believers) and tracking attendance for Sunday and midweek services.
 
+## 🌐 Live Demo
+
+**[View Live Application](https://your-app-name.onrender.com)** ← Click here to see the interface!
+
+> Note: The live demo may take a minute to load on first visit (free hosting).
+
 ## Features
 
 ### 📊 Dashboard
