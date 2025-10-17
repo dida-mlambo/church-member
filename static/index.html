@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Registration System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>⛪ Church Manager</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="dashboard">
+                    <span class="icon">📊</span> Dashboard
+                </li>
+                <li class="nav-item" data-page="believers">
+                    <span class="icon">👥</span> Believers
+                </li>
+                <li class="nav-item" data-page="services">
+                    <span class="icon">📅</span> Services
+                </li>
+                <li class="nav-item" data-page="attendance">
+                    <span class="icon">✓</span> Attendance
+                </li>
+                <li class="nav-item" data-page="reports">
+                    <span class="icon">📈</span> Reports
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <p>Overview of your church community</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-content">
+                            <h3 id="stat-believers">0</h3>
+                            <p>Total Believers</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-content">
+                            <h3 id="stat-services">0</h3>
+                            <p>Total Services</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-content">
+                            <h3 id="stat-avg-attendance">0</h3>
+                            <p>Avg Attendance</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🕐</div>
+                        <div class="stat-content">
+                            <h3 id="stat-recent-services">0</h3>
+                            <p>Recent Services (30d)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-sections">
+                    <div class="section">
+                        <h3>Service Type Distribution</h3>
+                        <div class="service-distribution">
+                            <div class="distribution-item">
+                                <div class="label">Sunday Services</div>
+                                <div class="bar-container">
+                                    <div class="bar sunday-bar" id="sunday-bar"></div>
+                                </div>
+                                <div class="count" id="sunday-count">0</div>
+                            </div>
+                            <div class="distribution-item">
+                                <div class="label">Midweek Services</div>
+                                <div class="bar-container">
+                                    <div class="bar midweek-bar" id="midweek-bar"></div>
+                                </div>
+                                <div class="count" id="midweek-count">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Top Attendees</h3>
+                        <div id="top-attendees-list" class="attendees-list">
+                            <p class="loading">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Believers Page -->
+            <div id="believers-page" class="page">
+                <div class="page-header">
+                    <div>
+                        <h2>Believers</h2>
+                        <p>Manage church members</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showBelieverModal()">+ Add Believer</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Date Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="believers-table-body">
+                            <tr><td colspan="5" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Services Page -->
+            <div id="services-page" class="page">
+                <div class="page-header">
+                    <div>
+                        <h2>Services</h2>
+                        <p>Manage church services</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showServiceModal()">+ Add Service</button>
+                </div>
+
+                <div class="service-tabs">
+                    <button class="tab-btn active" data-type="all" onclick="filterServices('all')">
+                        📋 All Services
+                    </button>
+                    <button class="tab-btn" data-type="sunday" onclick="filterServices('sunday')">
+                        ☀️ Sunday Services
+                    </button>
+                    <button class="tab-btn" data-type="midweek" onclick="filterServices('midweek')">
+                        🌙 Midweek Services
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Time</th>
+                                <th>Description</th>
+                                <th>Attendance</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="services-table-body">
+                            <tr><td colspan="6" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Attendance Page -->
+            <div id="attendance-page" class="page">
+                <div class="page-header">
+                    <h2>Record Attendance</h2>
+                    <p>Mark who attended each service</p>
+                </div>
+
+                <div class="attendance-form-container">
+                    <div class="attendance-instructions">
+                        <h3>📝 How to Record Attendance:</h3>
+                        <ol>
+                            <li>Select a service from the dropdown below</li>
+                            <li>Check the boxes next to believers who <strong>attended</strong></li>
+                            <li>Leave unchecked for those who were <strong>absent</strong></li>
+                            <li>Changes are saved automatically</li>
+                        </ol>
+                    </div>
+
+                    <div class="form-group">
+                        <label><strong>1. Select Service:</strong></label>
+                        <select id="attendance-service-select" class="form-control">
+                            <option value="">Choose a service...</option>
+                        </select>
+                    </div>
+
+                    <div id="attendance-checklist" class="attendance-checklist">
+                        <p class="info-message">👆 Select a service above to mark attendance</p>
+                    </div>
+
+                    <div id="attendance-summary" class="attendance-summary" style="display: none;">
+                        <div class="summary-stats">
+                            <div class="summary-item">
+                                <span class="summary-label">Present:</span>
+                                <span class="summary-value present" id="attendance-present-count">0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Absent:</span>
+                                <span class="summary-value absent" id="attendance-absent-count">0</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Total:</span>
+                                <span class="summary-value" id="attendance-total-count">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Page -->
+            <div id="reports-page" class="page">
+                <div class="page-header">
+                    <h2>Reports & Analytics</h2>
+                    <p>Detailed attendance insights</p>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="report-section">
+                        <h3>Believer Attendance Details</h3>
+                        <div class="form-group">
+                            <label>Select Believer</label>
+                            <select id="report-believer-select" class="form-control" onchange="loadBelieverReport()">
+                                <option value="">Select a believer...</option>
+                            </select>
+                        </div>
+                        <div id="believer-report-content" class="report-content">
+                            <p class="info-message">Select a believer to view their attendance report</p>
+                        </div>
+                    </div>
+
+                    <div class="report-section">
+                        <h3>Service Attendance Details</h3>
+                        <div class="form-group">
+                            <label>Select Service</label>
+                            <select id="report-service-select" class="form-control" onchange="loadServiceReport()">
+                                <option value="">Select a service...</option>
+                            </select>
+                        </div>
+                        <div id="service-report-content" class="report-content">
+                            <p class="info-message">Select a service to view attendance details</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Believer Modal -->
+    <div id="believer-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="believer-modal-title">Add Believer</h3>
+                <button class="close-btn" onclick="closeBelieverModal()">&times;</button>
+            </div>
+            <form id="believer-form" onsubmit="saveBeliever(event)">
+                <input type="hidden" id="believer-id">
+                <div class="form-group">
+                    <label>First Name *</label>
+                    <input type="text" id="believer-first-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name *</label>
+                    <input type="text" id="believer-last-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="believer-email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="believer-phone" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea id="believer-address" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Date Joined</label>
+                    <input type="date" id="believer-date-joined" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeBelieverModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="service-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="service-modal-title">Add Service</h3>
+                <button class="close-btn" onclick="closeServiceModal()">&times;</button>
+            </div>
+            <form id="service-form" onsubmit="saveService(event)">
+                <input type="hidden" id="service-id">
+                <div class="form-group">
+                    <label>Service Type *</label>
+                    <select id="service-type" class="form-control" required>
+                        <option value="sunday">Sunday Service</option>
+                        <option value="midweek">Midweek Service</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="date" id="service-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Time</label>
+                    <input type="time" id="service-time" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="service-description" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeServiceModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
