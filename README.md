@@ -2,11 +2,23 @@
 
 A comprehensive web-based system for managing church members (believers) and tracking attendance for Sunday and midweek services.
 
-## 🌐 Live Demo
+## 🖼️ Interface Preview
 
-**[View Live Application](https://your-app-name.onrender.com)** ← Click here to see the interface!
+### Dashboard
+Beautiful overview with statistics, service distribution, and top attendees.
 
-> Note: The live demo may take a minute to load on first visit (free hosting).
+### Features Interface
+- **Believers Management**: Add, edit, and track church members
+- **Services**: Separate tabs for Sunday ☀️ and Midweek 🌙 services  
+- **Attendance Tracking**: Easy checkbox interface with live summary (Present/Absent counts)
+- **Reports**: Detailed analytics for believers and services
+
+### Live Demo
+To run locally on your computer:
+```bash
+python app.py
+# Then open: http://localhost:8000
+```
 
 ## Features
 
